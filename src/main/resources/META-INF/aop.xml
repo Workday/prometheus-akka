@@ -1,0 +1,27 @@
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
+
+<aspectj>
+  <aspects>
+    <!-- Actors -->
+    <aspect name="akka.monitor.instrumentation.EnvelopeContextIntoEnvelopeMixin"/>
+    <aspect name="akka.monitor.instrumentation.MetricsIntoActorCellsMixin"/>
+    <aspect name="akka.monitor.instrumentation.MetricsIntoRouterCellsMixin"/>
+    <aspect name="akka.monitor.instrumentation.ActorCellInstrumentation"/>
+    <aspect name="akka.monitor.instrumentation.RoutedActorCellInstrumentation"/>
+    
+    <!-- Dispatchers -->
+    <aspect name="akka.monitor.instrumentation.DispatcherInstrumentation"/>
+    <aspect name="akka.monitor.instrumentation.DispatcherMetricCollectionInfoIntoDispatcherMixin"/>
+  </aspects>
+
+  <weaver>
+    <include within="akka..*"/>
+
+    <!-- For some weird reason ByteString produces a java.lang.VerifyError after going through the weaver. -->
+    <exclude within="akka.util.ByteString"/>
+
+    <!-- Exclude CallingThreadDispatcher, is only for test purposes -->
+    <exclude within="akka.testkit.CallingThreadDispatcher"/>
+  </weaver>
+
+</aspectj>
