@@ -12,13 +12,13 @@ val prometheusVersion = "0.0.22"
 
 checksums in update := Nil
 
-resolvers += Resolver.sonatypeRepo("releases")
+resolvers += Resolver.bintrayRepo("kamon-io", "releases")
 
 libraryDependencies ++= Seq(
   "org.slf4j" % "slf4j-api" % "1.7.22",
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
   "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
-  "io.kamon" %% "kamon-core" % "0.6.6",
+  "io.kamon" %% "kamon-core" % "0.6.7",
   "io.prometheus" % "simpleclient" % prometheusVersion,
   "io.prometheus" % "simpleclient_common" % prometheusVersion,
   "com.typesafe" % "config" % "1.3.1",
