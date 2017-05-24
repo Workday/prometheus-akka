@@ -28,7 +28,7 @@ object MetricsConfig {
   val ActorGroups = "akka-actor-groups"
 
   private val defaultConfig = ConfigFactory.load(this.getClass.getClassLoader, ConfigParseOptions.defaults(), ConfigResolveOptions.defaults().setAllowUnresolved(true))
-  private val metricFiltersConfig = defaultConfig.getConfig("workday.akka.monitor.metric.filters")
+  private val metricFiltersConfig = defaultConfig.getConfig("prometheus.akka.metric.filters")
 
   implicit class Syntax(val config: Config) extends AnyVal {
     def firstLevelKeys: Set[String] = {
