@@ -1,11 +1,11 @@
 # prometheus-akka
 
-This project is a fork of [Kamon-Akka](http://kamon.io/documentation/kamon-akka/0.6.6/overview/). The Kamon team have done a great job and if you just experimenting with metrics collection, then their tools and documentation are a great starting point. 
+This project is a fork of [Kamon-Akka](http://kamon.io/documentation/kamon-akka/0.6.6/overview/). The Kamon team have done a great job and if you are just experimenting with metrics collection, then their tools and documentation are a great starting point. 
 Our internal monitoring tools work better with [Prometheus Java Client](https://github.com/prometheus/client_java) based metrics than with [Kamon](http://kamon.io/documentation/get-started/) based metrics.
 The use of the [Kamon-Prometheus](https://github.com/MonsantoCo/kamon-prometheus) bridge was not as smooth as we had hoped.
 
 Other Differences from Kamon-Akka:
-- we do not support Kamon TraceContexts as currently have no use case for them yet
+- we do not support Kamon TraceContexts, as currently have no use case for them yet
 - we only support Scala 2.11 and Scala 2.12
 - we only build with Akka 2.4 but this jar works fine with Akka 2.5 too
 - we have added Actor Group support (see description in Metrics section)
@@ -18,7 +18,7 @@ To enable monitoring, include the appropriate jar as a dependency and include th
 
 -javaagent:/path/to/aspectjweaver-1.8.10.jar
 
-If you don't have a Prometheus Metrics endpoint already, you can use the [Prometheus MetricsServlet](https://github.com/prometheus/client_java/blob/master/simpleclient_servlet/src/main/java/io/prometheus/client/exporter/MetricsServlet.java). If you don't ant to use a servlet, you can work directly with the [Prometheus TextFormat](https://github.com/prometheus/client_java/blob/master/simpleclient_common/src/main/java/io/prometheus/client/exporter/common/TextFormat.java) class.
+If you don't have a Prometheus Metrics endpoint already, you can use the [Prometheus MetricsServlet](https://github.com/prometheus/client_java/blob/master/simpleclient_servlet/src/main/java/io/prometheus/client/exporter/MetricsServlet.java). If you don't want to use a servlet, you can work directly with the [Prometheus TextFormat](https://github.com/prometheus/client_java/blob/master/simpleclient_common/src/main/java/io/prometheus/client/exporter/common/TextFormat.java) class.
 
 ## Configuration
 
