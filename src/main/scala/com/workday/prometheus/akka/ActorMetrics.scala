@@ -32,6 +32,6 @@ class ActorMetrics(entity: Entity) {
   val mailboxSize = Gauge.build().name(s"akka_actor_mailbox_size_$actorName").help("Akka Actor mailbox size").register()
   val processingTime = Counter.build().name(s"akka_actor_processing_time_$actorName").help("Akka Actor processing time (Nanos)").register()
   val timeInMailbox = Counter.build().name(s"akka_actor_time_in_mailbox_$actorName").help("Akka Actor time in mailbox (Nanos)").register()
-  val messages = Counter.build().name(s"akka_actor_messages_count_$actorName").help("Akka Actor messages").register()
+  val messages = Counter.build().name(s"akka_actor_message_count_$actorName").help("Akka Actor messages").register()
   val errors = Counter.build().name(s"akka_actor_error_count_$actorName").help("Akka Actor errors").register()
 }

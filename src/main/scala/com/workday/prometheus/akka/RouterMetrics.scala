@@ -32,5 +32,6 @@ class RouterMetrics(entity: Entity) {
   val routingTime = Counter.build().name(s"akka_router_routing_time_$actorName").help("Akka Router routing time (Nanos)").register()
   val processingTime = Counter.build().name(s"akka_router_processing_time_$actorName").help("Akka Router processing time (Nanos)").register()
   val timeInMailbox = Counter.build().name(s"akka_router_time_in_mailbox_$actorName").help("Akka Router time in mailbox (Nanos)").register()
+  val messages = Counter.build().name(s"akka_router_message_count_$actorName").help("Akka Router messages").register()
   val errors = Counter.build().name(s"akka_router_error_count_$actorName").help("Akka Router errors").register()
 }

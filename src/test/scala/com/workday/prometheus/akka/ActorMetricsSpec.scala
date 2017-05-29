@@ -35,7 +35,9 @@ class ActorMetricsSpec extends TestKitBaseSpec("ActorMetricsSpec") {
       actorMetricsRecorderOf(nonTrackedActor) shouldBe empty
       actorMetricsRecorderOf(excludedTrackedActor) shouldBe empty
 
-      actorMetricsRecorderOf(trackedActor).get.actorName shouldEqual "actormetricsspec_user_tracked_actor"
+      val metrics = actorMetricsRecorderOf(trackedActor).get
+      metrics.actorName shouldEqual "actormetricsspec_user_tracked_actor"
+      metrics.messages.get shouldEqual 1.0
     }
   }
 

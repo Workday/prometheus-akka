@@ -19,17 +19,19 @@ package com.workday.prometheus.akka
 import scala.collection.JavaConverters._
 import scala.concurrent.duration._
 
-import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpecLike}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually
 
 import akka.actor._
 import akka.routing.RoundRobinPool
-import akka.testkit.{TestKit, TestProbe}
+import akka.testkit.TestProbe
 import io.prometheus.client.Collector
 
 class ActorGroupMetricsSpec extends TestKitBaseSpec("ActorGroupMetricsSpec") with BeforeAndAfterEach with Eventually {
 
   val CountMetricName = "akka_actor_group_actor_count"
+  val MessagesMetricName = "akka_actor_group_message_count"
+  val MailboxesMetricName = "akka_actor_group_mailboxes_size"
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -46,8 +48,8 @@ class ActorGroupMetricsSpec extends TestKitBaseSpec("ActorGroupMetricsSpec") wit
       findGroupRecorder("exclusive") shouldBe empty
       val map = findGroupRecorder("tracked")
       map.getOrElse(CountMetricName, -1) shouldEqual 1.0
-      map.getOrElse("akka_actor_group_messages_count", -1) shouldEqual 1.0
-      map.getOrElse("akka_actor_group_mailboxes_size", -1) shouldEqual 0.0
+      map.getOrElse(MessagesMetricName, -1) shouldEqual 1.0
+      map.getOrElse(MailboxesMetricName, -1) shouldEqual 0.0
 
       system.stop(trackedActor)
       eventually(timeout(5 seconds)) {
@@ -56,7 +58,10 @@ class ActorGroupMetricsSpec extends TestKitBaseSpec("ActorGroupMetricsSpec") wit
 
       val trackedActor2 = createTestActor("tracked-actor2")
       val trackedActor3 = createTestActor("tracked-actor3")
-      findGroupRecorder("tracked").getOrElse(CountMetricName, -1) shouldEqual 2.0
+
+      val map2 = findGroupRecorder("tracked")
+      map2.getOrElse(CountMetricName, -1) shouldEqual 2.0
+      map2.getOrElse(MessagesMetricName, -1) shouldEqual 3.0
     }
 
     "respect the configured include and exclude filters for routee actors" in {
@@ -68,8 +73,8 @@ class ActorGroupMetricsSpec extends TestKitBaseSpec("ActorGroupMetricsSpec") wit
       findGroupRecorder("exclusive") shouldBe empty
       val map = findGroupRecorder("tracked")
       map.getOrElse(CountMetricName, -1) shouldEqual 5.0
-      map.getOrElse("akka_actor_group_messages_count", -1) shouldEqual 1.0
-      map.getOrElse("akka_actor_group_mailboxes_size", -1) shouldEqual 0.0
+      map.getOrElse(MessagesMetricName, -1) shouldEqual 1.0
+      map.getOrElse(MailboxesMetricName, -1) shouldEqual 0.0
 
       system.stop(trackedRouter)
       eventually(timeout(5 seconds)) {
@@ -79,6 +84,10 @@ class ActorGroupMetricsSpec extends TestKitBaseSpec("ActorGroupMetricsSpec") wit
       val trackedRouter2 = createTestPoolRouter("tracked-router2")
       val trackedRouter3 = createTestPoolRouter("tracked-router3")
       findGroupRecorder("tracked").getOrElse(CountMetricName, -1) shouldEqual 10.0
+
+      val map2 = findGroupRecorder("tracked")
+      map2.getOrElse(CountMetricName, -1) shouldEqual 10.0
+      map2.getOrElse(MessagesMetricName, -1) shouldEqual 3.0
     }
   }
 

@@ -119,6 +119,11 @@ object ActorMonitors {
       trackingGroups: List[String], actorCellCreation: Boolean)
       extends GroupMetricsTrackingActor(entity, trackingGroups, actorCellCreation) {
 
+    override def captureEnvelopeContext(): EnvelopeContext = {
+      routerMetrics.messages.inc()
+      super.captureEnvelopeContext()
+    }
+
     def processMessage(pjp: ProceedingJoinPoint, envelopeContext: EnvelopeContext): AnyRef = {
       val timestampBeforeProcessing = RelativeNanoTimestamp.now
 

@@ -36,7 +36,9 @@ class RouterMetricsSpec extends TestKitBaseSpec("RouterMetricsSpec") {
       routerMetricsRecorderOf(nonTrackedRouter) shouldBe empty
       routerMetricsRecorderOf(excludedTrackedRouter) shouldBe empty
 
-      routerMetricsRecorderOf(trackedRouter).get.actorName shouldEqual "routermetricsspec_user_tracked_pool_router"
+      val metrics = routerMetricsRecorderOf(trackedRouter).get
+      metrics.actorName shouldEqual "routermetricsspec_user_tracked_pool_router"
+      metrics.messages.get shouldEqual 1.0
     }
   }
 

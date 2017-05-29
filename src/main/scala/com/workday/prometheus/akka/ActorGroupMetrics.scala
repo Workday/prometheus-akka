@@ -22,7 +22,7 @@ object ActorGroupMetrics {
   val mailboxSize = Gauge.build().name(s"akka_actor_group_mailboxes_size").help("Akka Actor Group mailboxes size").labelNames("groupName").register()
   val processingTime = Counter.build().name(s"akka_actor_group_processing_time").help("Akka Actor Group processing time (Nanos)").labelNames("groupName").register()
   val timeInMailbox = Counter.build().name(s"akka_actor_group_time_in_mailboxes").help("Akka Actor Group time in mailboxes (Nanos)").labelNames("groupName").register()
-  val messages = Counter.build().name(s"akka_actor_group_messages_count").help("Akka Actor Group messages").labelNames("groupName").register()
+  val messages = Counter.build().name(s"akka_actor_group_message_count").help("Akka Actor Group messages").labelNames("groupName").register()
   val actorCount = Gauge.build().name(s"akka_actor_group_actor_count").help("Akka Actor Group actor count").labelNames("groupName").register()
   val errors = Counter.build().name(s"akka_actor_group_error_count").help("Akka Actor Group errors").labelNames("groupName").register()
 }
