@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/https://travis-ci.org/Workday/prometheus-akka.svg?branch=master)](https://travis-ci.org/Workday/prometheus-akka)
+[![codecov.io](https://codecov.io/gh/Workday/prometheus-akka/coverage.svg?branch=master)](https://codecov.io/gh/Workday/prometheus-akka/branch/master)
+
 # prometheus-akka
 
 This project is a fork of [Kamon-Akka](http://kamon.io/documentation/kamon-akka/0.6.6/overview/). The Kamon team have done a great job and if you are just experimenting with metrics collection, then their tools and documentation are a great starting point. 
