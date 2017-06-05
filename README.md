@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/https://travis-ci.org/Workday/prometheus-akka.svg?branch=master)](https://travis-ci.org/Workday/prometheus-akka)
+[![Build Status](https://travis-ci.org/Workday/prometheus-akka.svg?branch=master)](https://travis-ci.org/Workday/prometheus-akka)
 [![codecov.io](https://codecov.io/gh/Workday/prometheus-akka/coverage.svg?branch=master)](https://codecov.io/gh/Workday/prometheus-akka/branch/master)
 
 # prometheus-akka
