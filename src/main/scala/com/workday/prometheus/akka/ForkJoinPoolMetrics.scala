@@ -20,14 +20,13 @@ import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
 
 import scala.collection.JavaConverters.{ mapAsScalaConcurrentMapConverter, seqAsJavaListConverter }
-import scala.concurrent.forkjoin.ForkJoinPool
 
 import io.prometheus.client.Collector
 import io.prometheus.client.Collector.MetricFamilySamples
 import io.prometheus.client.GaugeMetricFamily
 
 object ForkJoinPoolMetrics extends Collector {
-  val map = new ConcurrentHashMap[String, Option[ForkJoinPool]].asScala
+  val map = new ConcurrentHashMap[String, Option[ForkJoinPoolLike]].asScala
   this.register()
   override def collect(): java.util.List[MetricFamilySamples] = {
     val dispatcherNameList = List("dispatcherName").asJava
@@ -80,7 +79,7 @@ object ForkJoinPoolMetrics extends Collector {
     Collections.unmodifiableList(jul)
   }
 
-  def add(dispatcherName: String, fjp: ForkJoinPool): Unit = {
+  def add(dispatcherName: String, fjp: ForkJoinPoolLike): Unit = {
     map.put(dispatcherName, Some(fjp))
   }
 

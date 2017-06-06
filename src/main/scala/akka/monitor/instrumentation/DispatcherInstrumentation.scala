@@ -20,13 +20,13 @@ package akka.monitor.instrumentation
 import java.lang.reflect.Method
 import java.util.concurrent.{ ExecutorService, ThreadPoolExecutor }
 
-import scala.concurrent.forkjoin.ForkJoinPool
+import scala.util.control.NonFatal
 
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.{ After, AfterReturning, Around, Aspect, Before, DeclareMixin, Pointcut }
 import org.slf4j.LoggerFactory
 
-import com.workday.prometheus.akka.{ ForkJoinPoolMetrics, MetricsConfig, ThreadPoolMetrics }
+import com.workday.prometheus.akka.{ ForkJoinPoolLike, ForkJoinPoolMetrics, MetricsConfig, ThreadPoolMetrics }
 
 import akka.actor.{ ActorContext, ActorSystem, ActorSystemImpl, Props }
 import akka.dispatch.{ Dispatcher, Dispatchers, ExecutorServiceDelegate, MessageDispatcher }
@@ -81,9 +81,15 @@ class DispatcherInstrumentation {
     }
     if (MetricsConfig.shouldTrack(MetricsConfig.Dispatcher, prefixedName)) {
       executorService match {
-        case fjp: ForkJoinPool ⇒ ForkJoinPoolMetrics.add(prefixedName, fjp)
         case tpe: ThreadPoolExecutor ⇒ ThreadPoolMetrics.add(prefixedName, tpe)
-        case other ⇒ logger.warn(s"Unhandled Dispatcher Execution Service ${other.getClass.getName}")
+        case other => {
+          try {
+            val fjp = other.asInstanceOf[ForkJoinPoolLike]
+            ForkJoinPoolMetrics.add(prefixedName, fjp)
+          } catch {
+            case NonFatal(e) => logger.warn(s"Unhandled Dispatcher Execution Service ${other.getClass.getName}")
+          }
+        }
       }
     }
   }
@@ -142,9 +148,15 @@ class DispatcherInstrumentation {
 
     if (lookupData.actorSystem != null)
       lazyExecutor.asInstanceOf[ExecutorServiceDelegate].executor match {
-        case fjp: ForkJoinPool ⇒ ForkJoinPoolMetrics.remove(lazyExecutor.lookupData.dispatcherName)
         case tpe: ThreadPoolExecutor ⇒ ThreadPoolMetrics.remove(lazyExecutor.lookupData.dispatcherName)
-        case other ⇒ // nothing to remove.
+        case other => {
+          try {
+            val fjp = other.asInstanceOf[ForkJoinPoolLike]
+            ForkJoinPoolMetrics.remove(lazyExecutor.lookupData.dispatcherName)
+          } catch {
+            case NonFatal(e) =>
+          }
+        }
       }
   }
 
