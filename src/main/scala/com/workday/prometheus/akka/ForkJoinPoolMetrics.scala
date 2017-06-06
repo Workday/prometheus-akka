@@ -79,12 +79,8 @@ object ForkJoinPoolMetrics extends Collector {
     Collections.unmodifiableList(jul)
   }
 
-  def add(dispatcherName: String, fjp: scala.concurrent.forkjoin.ForkJoinPool): Unit = {
-    map.put(dispatcherName, Some(fjp.asInstanceOf[ForkJoinPoolLike]))
-  }
-
-  def add(dispatcherName: String, fjp: java.util.concurrent.ForkJoinPool): Unit = {
-    map.put(dispatcherName, Some(fjp.asInstanceOf[ForkJoinPoolLike]))
+  def add(dispatcherName: String, fjp: ForkJoinPoolLike): Unit = {
+    map.put(dispatcherName, Some(fjp))
   }
 
   def remove(dispatcherName: String): Unit = {

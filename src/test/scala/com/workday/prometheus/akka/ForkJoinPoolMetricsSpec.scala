@@ -23,7 +23,7 @@ class ForkJoinPoolMetricsSpec extends BaseSpec {
       val name = "ForkJoinPoolMetricsSpec-java-pool"
       val pool = new java.util.concurrent.ForkJoinPool
       try {
-        ForkJoinPoolMetrics.add(name, pool)
+        ForkJoinPoolMetrics.add(name, pool.asInstanceOf[ForkJoinPoolLike])
       } finally {
         ForkJoinPoolMetrics.remove(name)
         pool.shutdownNow()
@@ -34,7 +34,7 @@ class ForkJoinPoolMetricsSpec extends BaseSpec {
       val name = "ForkJoinPoolMetricsSpec-scala-pool"
       val pool = new scala.concurrent.forkjoin.ForkJoinPool
       try {
-        ForkJoinPoolMetrics.add(name, pool)
+        ForkJoinPoolMetrics.add(name, pool.asInstanceOf[ForkJoinPoolLike])
       } finally {
         ForkJoinPoolMetrics.remove(name)
         pool.shutdownNow()
