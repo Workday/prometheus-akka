@@ -20,8 +20,6 @@ package akka.monitor.instrumentation
 import java.lang.reflect.Method
 import java.util.concurrent.{ ExecutorService, ThreadPoolExecutor }
 
-import scala.concurrent.forkjoin.ForkJoinPool
-
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.{ After, AfterReturning, Around, Aspect, Before, DeclareMixin, Pointcut }
 import org.slf4j.LoggerFactory
@@ -81,7 +79,8 @@ class DispatcherInstrumentation {
     }
     if (MetricsConfig.shouldTrack(MetricsConfig.Dispatcher, prefixedName)) {
       executorService match {
-        case fjp: ForkJoinPool ⇒ ForkJoinPoolMetrics.add(prefixedName, fjp)
+        case fjp: scala.concurrent.forkjoin.ForkJoinPool ⇒ ForkJoinPoolMetrics.add(prefixedName, fjp)
+        case fjp: java.util.concurrent.ForkJoinPool ⇒ ForkJoinPoolMetrics.add(prefixedName, fjp)
         case tpe: ThreadPoolExecutor ⇒ ThreadPoolMetrics.add(prefixedName, tpe)
         case other ⇒ logger.warn(s"Unhandled Dispatcher Execution Service ${other.getClass.getName}")
       }
@@ -142,7 +141,8 @@ class DispatcherInstrumentation {
 
     if (lookupData.actorSystem != null)
       lazyExecutor.asInstanceOf[ExecutorServiceDelegate].executor match {
-        case fjp: ForkJoinPool ⇒ ForkJoinPoolMetrics.remove(lazyExecutor.lookupData.dispatcherName)
+        case fjp: scala.concurrent.forkjoin.ForkJoinPool ⇒ ForkJoinPoolMetrics.remove(lazyExecutor.lookupData.dispatcherName)
+        case fjp: java.util.concurrent.ForkJoinPool ⇒ ForkJoinPoolMetrics.remove(lazyExecutor.lookupData.dispatcherName)
         case tpe: ThreadPoolExecutor ⇒ ThreadPoolMetrics.remove(lazyExecutor.lookupData.dispatcherName)
         case other ⇒ // nothing to remove.
       }

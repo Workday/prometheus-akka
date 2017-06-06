@@ -14,29 +14,31 @@
  * and limitations under the License.
  * =========================================================================================
  */
-package com.workday.prometheus
+package com.workday.prometheus.akka
 
-import scala.annotation.tailrec
+class ForkJoinPoolMetricsSpec extends BaseSpec {
 
-import io.prometheus.client.Collector
+  "ForkJoinPoolMetrics" should {
+    "support java forkjoinpool" in {
+      val name = "ForkJoinPoolMetricsSpec-java-pool"
+      val pool = new java.util.concurrent.ForkJoinPool
+      try {
+        ForkJoinPoolMetrics.add(name, pool)
+      } finally {
+        ForkJoinPoolMetrics.remove(name)
+        pool.shutdownNow()
+      }
+    }
 
-package object akka {
-  def metricFriendlyActorName(actorPath: String) = {
-    Collector.sanitizeMetricName(trimLeadingSlashes(actorPath).toLowerCase.replace("/", "_"))
-  }
-
-  @tailrec
-  private def trimLeadingSlashes(s: String): String = {
-    if (s.startsWith("/")) trimLeadingSlashes(s.substring(1)) else s
-  }
-
-  type ForkJoinPoolLike = {
-    def getParallelism: Int
-    def getPoolSize: Int
-    def getActiveThreadCount: Int
-    def getRunningThreadCount: Int
-    def getQueuedSubmissionCount: Int
-    def getQueuedTaskCount: Long
-    def getStealCount: Long
+    "support scala forkjoinpool" in {
+      val name = "ForkJoinPoolMetricsSpec-scala-pool"
+      val pool = new scala.concurrent.forkjoin.ForkJoinPool
+      try {
+        ForkJoinPoolMetrics.add(name, pool)
+      } finally {
+        ForkJoinPoolMetrics.remove(name)
+        pool.shutdownNow()
+      }
+    }
   }
 }
