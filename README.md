@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/Workday/prometheus-akka.svg?branch=master)](https://travis-ci.org/Workday/prometheus-akka)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.workday/prometheus-akka_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.workday/prometheus-akka_2.12)
 [![codecov.io](https://codecov.io/gh/Workday/prometheus-akka/coverage.svg?branch=master)](https://codecov.io/gh/Workday/prometheus-akka/branch/master)
 
 # prometheus-akka
@@ -13,7 +14,9 @@ Other Differences from Kamon-Akka:
 - we only build with Akka 2.4 but this jar works fine with Akka 2.5 too
 - we have added Actor Group support, similar to the support that will soon be released in kamon-akka (see description in Metrics section)
 
-The jar will soon be published to Maven Central.
+```sbt
+"com.workday" %% "prometheus-akka" % "0.7.0"
+```
 
 There is a sample project at https://github.com/pjfanning/prometheus-akka-sample
 
