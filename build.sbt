@@ -63,4 +63,11 @@ pomExtra := (
     <url>git@github.com:Workday/prometheus-akka.git</url>
     <connection>scm:git:git@github.com:Workday/prometheus-akka.git</connection>
   </scm>
+  <developers>
+    <developer>
+      <id>pjfanning</id>
+      <name>PJ Fanning</name>
+      <url>https://github.com/pjfanning</url>
+    </developer>
+  </developers>
 )
