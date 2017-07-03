@@ -32,7 +32,7 @@ trait InstrumentedEnvelope extends Serializable {
 
 object InstrumentedEnvelope {
   def apply(): InstrumentedEnvelope = new InstrumentedEnvelope {
-    var envelopeContext: EnvelopeContext = _
+    var envelopeContext: EnvelopeContext = EnvelopeContext.Empty
 
     override def setEnvelopeContext(envelopeContext: EnvelopeContext): Unit =
       this.envelopeContext = envelopeContext
