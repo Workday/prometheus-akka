@@ -146,18 +146,12 @@ class DispatcherInstrumentation {
   def afterLazyExecutorShutdown(lazyExecutor: LookupDataAware): Unit = {
     import lazyExecutor.lookupData
 
-    if (lookupData.actorSystem != null)
+    if (lookupData.actorSystem != null) {
       lazyExecutor.asInstanceOf[ExecutorServiceDelegate].executor match {
         case tpe: ThreadPoolExecutor ⇒ ThreadPoolMetrics.remove(lazyExecutor.lookupData.dispatcherName)
-        case other => {
-          try {
-            val fjp = other.asInstanceOf[ForkJoinPoolLike]
-            ForkJoinPoolMetrics.remove(lazyExecutor.lookupData.dispatcherName)
-          } catch {
-            case NonFatal(e) =>
-          }
-        }
+        case other => ForkJoinPoolMetrics.remove(lazyExecutor.lookupData.dispatcherName)
       }
+    }
   }
 
   @Pointcut("execution(* akka.routing.BalancingPool.newRoutee(..)) && args(props, context)")
@@ -215,8 +209,4 @@ object LookupDataAware {
 
     result
   }
-}
-
-object AkkaDispatcherMetrics {
-  val Category = "akka-dispatcher"
 }
