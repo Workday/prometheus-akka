@@ -17,6 +17,7 @@
 package akka.monitor.instrumentation
 
 import org.aspectj.lang.ProceedingJoinPoint
+import org.slf4j.LoggerFactory
 
 import com.workday.prometheus.akka.{ ActorMetrics, ActorGroupMetrics, RouterMetrics }
 
@@ -64,6 +65,8 @@ object ActorMonitor {
 
 object ActorMonitors {
 
+  val logger = LoggerFactory.getLogger(ActorMonitors.getClass)
+
   val ContextPropagationOnly = new ActorMonitor {
     def captureEnvelopeContext(): EnvelopeContext =
       EnvelopeContext(RelativeNanoTimestamp.now)
@@ -79,6 +82,10 @@ object ActorMonitors {
   class TrackedActor(val entity: Entity, actorMetrics: Option[ActorMetrics],
       trackingGroups: List[String], actorCellCreation: Boolean)
       extends GroupMetricsTrackingActor(entity, trackingGroups, actorCellCreation) {
+
+    if (logger.isDebugEnabled()) {
+      logger.debug(s"tracking ${entity.name} actor: ${actorMetrics.isDefined} actor-group: ${trackingGroups}")
+    }
 
     override def captureEnvelopeContext(): EnvelopeContext = {
       actorMetrics.foreach { am =>
@@ -118,6 +125,10 @@ object ActorMonitors {
   class TrackedRoutee(val entity: Entity, routerMetrics: RouterMetrics,
       trackingGroups: List[String], actorCellCreation: Boolean)
       extends GroupMetricsTrackingActor(entity, trackingGroups, actorCellCreation) {
+
+    if (logger.isDebugEnabled()) {
+      logger.debug(s"tracking ${entity.name} router: true actor-group: ${trackingGroups}")
+    }
 
     override def captureEnvelopeContext(): EnvelopeContext = {
       routerMetrics.messages.inc()
