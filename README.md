@@ -9,10 +9,10 @@ Our internal monitoring tools work better with [Prometheus Java Client](https://
 The use of the [Kamon-Prometheus](https://github.com/MonsantoCo/kamon-prometheus) bridge was not as smooth as we had hoped.
 
 Other Differences from Kamon-Akka:
-- we do not support Kamon TraceContexts, as currently have no use case for them yet
+- we do not support Kamon TraceContexts, as we currently have no use case for them
 - we only support Scala 2.11 and Scala 2.12
 - we only build with Akka 2.4 but this jar works fine with Akka 2.5 too
-- we have added Actor Group support, similar to the support that will soon be released in kamon-akka (see description in Metrics section)
+- we have added Actor Group support (similar support was recently added to kamon-akka) - see description in Metrics section
 
 ```sbt
 "com.workday" %% "prometheus-akka" % "0.7.0"
