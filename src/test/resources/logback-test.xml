@@ -5,13 +5,9 @@
         </encoder>
     </appender>
 
-    <logger name="akka.monitor.instrumentation" level="DEBUG">
-        <appender-ref ref="STDOUT"/>
-    </logger>
+    <logger name="akka.monitor.instrumentation" level="DEBUG"/>
 
-    <logger name="com.workday.prometheus" level="DEBUG">
-        <appender-ref ref="STDOUT"/>
-    </logger>
+    <logger name="com.workday.prometheus" level="DEBUG"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
