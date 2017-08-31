@@ -4,7 +4,10 @@ jdk:
 scala:
    - 2.11.11
    - 2.12.2
+env:
+  - AKKA_VERSION=
+  - AKKA_VERSION=2.5.4
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport
+  - sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport -Dakka.version=$AKKA_VERSION
 after_success:
   - bash <(curl -s https://codecov.io/bash)

@@ -6,16 +6,21 @@ scalaVersion := "2.11.11"
 
 crossScalaVersions := Seq("2.11.11", "2.12.2")
 
-val akkaVersion = "2.4.18"
+def sysPropOrDefault(propName: String, default: String): String = Option(System.getProperty(propName)) match {
+  case Some(propVal) if !propVal.trim.isEmpty => propVal.trim
+  case _ => default
+}
+
+val akkaVersion = sysPropOrDefault("akka.version", "2.4.20")
 val aspectjweaverVersion = "1.8.10"
-val prometheusVersion = "0.0.22"
+val prometheusVersion = "0.0.26"
 
 checksums in update := Nil
 
 resolvers += Resolver.bintrayRepo("kamon-io", "releases")
 
 libraryDependencies ++= Seq(
-  "org.slf4j" % "slf4j-api" % "1.7.22",
+  "org.slf4j" % "slf4j-api" % "1.7.25",
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
   "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
   "io.kamon" %% "kamon-core" % "0.6.7",
@@ -24,7 +29,7 @@ libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.1",
   "org.aspectj" % "aspectjweaver" % aspectjweaverVersion,
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
-  "org.scalatest" %% "scalatest" % "3.0.1" % "test",
+  "org.scalatest" %% "scalatest" % "3.0.3" % "test",
   "ch.qos.logback" % "logback-classic" % "1.2.3" % "test"
 )
 
