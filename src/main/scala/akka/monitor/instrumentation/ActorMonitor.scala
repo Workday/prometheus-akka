@@ -25,7 +25,6 @@ import akka.actor.{ActorRef, ActorSystem, Cell}
 import akka.monitor.instrumentation.ActorMonitors.{TrackedActor, TrackedRoutee}
 import io.prometheus.client.Collector
 import kamon.metric.Entity
-import kamon.util.RelativeNanoTimestamp
 
 trait ActorMonitor {
   def captureEnvelopeContext(): EnvelopeContext
@@ -69,8 +68,7 @@ object ActorMonitors {
   val logger = LoggerFactory.getLogger(ActorMonitors.getClass)
 
   val ContextPropagationOnly = new ActorMonitor {
-    def captureEnvelopeContext(): EnvelopeContext =
-      EnvelopeContext(RelativeNanoTimestamp.now)
+    def captureEnvelopeContext(): EnvelopeContext = EnvelopeContext()
 
     def processMessage(pjp: ProceedingJoinPoint, envelopeContext: EnvelopeContext): AnyRef = {
       pjp.proceed()
@@ -97,7 +95,7 @@ object ActorMonitors {
     }
 
     def processMessage(pjp: ProceedingJoinPoint, envelopeContext: EnvelopeContext): AnyRef = {
-      val timeInMailbox = RelativeNanoTimestamp.now - envelopeContext.nanoTime
+      val timeInMailbox: Double = (System.nanoTime() - envelopeContext.nanoTime).toDouble / Collector.NANOSECONDS_PER_SECOND
 
       val actorProcessingTimers = actorMetrics.map { am =>
         am.processingTime.startTimer()
@@ -113,10 +111,10 @@ object ActorMonitors {
         actorGroupProcessingTimers.foreach { _.close() }
 
         actorMetrics.foreach { am =>
-          am.timeInMailbox.inc(timeInMailbox.nanos.toDouble / Collector.NANOSECONDS_PER_SECOND)
+          am.timeInMailbox.inc(timeInMailbox)
           am.mailboxSize.dec()
         }
-        recordProcessMetrics(timeInMailbox)
+        recordGroupMetrics(timeInMailbox)
       }
     }
 
@@ -142,7 +140,7 @@ object ActorMonitors {
     }
 
     def processMessage(pjp: ProceedingJoinPoint, envelopeContext: EnvelopeContext): AnyRef = {
-      val timeInMailbox = RelativeNanoTimestamp.now - envelopeContext.nanoTime
+      val timeInMailbox: Double = (System.nanoTime() - envelopeContext.nanoTime).toDouble / Collector.NANOSECONDS_PER_SECOND
 
       val processingTimer = routerMetrics.processingTime.startTimer()
       val actorGroupProcessingTimers = trackingGroups.map { group =>
@@ -154,8 +152,8 @@ object ActorMonitors {
       } finally {
         processingTimer.close()
         actorGroupProcessingTimers.foreach { _.close() }
-        routerMetrics.timeInMailbox.inc(timeInMailbox.nanos.toDouble / Collector.NANOSECONDS_PER_SECOND)
-        recordProcessMetrics(timeInMailbox)
+        routerMetrics.timeInMailbox.inc(timeInMailbox)
+        recordGroupMetrics(timeInMailbox)
       }
     }
 
@@ -178,12 +176,12 @@ object ActorMonitors {
         ActorGroupMetrics.mailboxSize.labels(group).inc()
         ActorGroupMetrics.messages.labels(group).inc()
       }
-      EnvelopeContext(RelativeNanoTimestamp.now)
+      EnvelopeContext()
     }
 
-    protected def recordProcessMetrics(timeInMailbox: RelativeNanoTimestamp): Unit = {
+    protected def recordGroupMetrics(timeInMailbox: Double): Unit = {
       trackingGroups.foreach { group =>
-        ActorGroupMetrics.timeInMailbox.labels(group).inc(timeInMailbox.nanos.toDouble / Collector.NANOSECONDS_PER_SECOND)
+        ActorGroupMetrics.timeInMailbox.labels(group).inc(timeInMailbox)
         ActorGroupMetrics.mailboxSize.labels(group).dec()
       }
     }
