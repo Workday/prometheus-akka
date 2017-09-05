@@ -22,7 +22,6 @@ import com.workday.prometheus.akka.RouterMetrics
 
 import akka.actor.Cell
 import kamon.metric.Entity
-import kamon.util.RelativeNanoTimestamp
 
 trait RouterMonitor {
   def processMessage(pjp: ProceedingJoinPoint): AnyRef
@@ -56,15 +55,11 @@ object NoOpRouterMonitor extends RouterMonitor {
 class MetricsOnlyRouterMonitor(entity: Entity, routerMetrics: RouterMetrics) extends RouterMonitor {
 
   def processMessage(pjp: ProceedingJoinPoint): AnyRef = {
-    val timestampBeforeProcessing = RelativeNanoTimestamp.now
-
+    val timer = routerMetrics.routingTime.startTimer()
     try {
       pjp.proceed()
     } finally {
-      val timestampAfterProcessing = RelativeNanoTimestamp.now
-      val routingTime = timestampAfterProcessing - timestampBeforeProcessing
-
-      routerMetrics.routingTime.inc(routingTime.nanos)
+      timer.close()
     }
   }
 
