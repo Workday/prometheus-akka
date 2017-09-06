@@ -19,7 +19,6 @@ package akka.monitor.instrumentation
 import com.workday.prometheus.akka.TestKitBaseSpec
 import akka.actor.{Actor, ExtendedActorSystem, Props}
 import akka.dispatch.Envelope
-import kamon.util.RelativeNanoTimestamp
 
 class EnvelopeSpec extends TestKitBaseSpec("envelope-spec") {
 
@@ -28,7 +27,7 @@ class EnvelopeSpec extends TestKitBaseSpec("envelope-spec") {
       val actorRef = system.actorOf(Props[NoReply])
       val env = Envelope("msg", actorRef, system).asInstanceOf[Object]
       env match {
-        case e: Envelope with InstrumentedEnvelope => e.setEnvelopeContext(EnvelopeContext(RelativeNanoTimestamp.now))
+        case e: Envelope with InstrumentedEnvelope => e.setEnvelopeContext(EnvelopeContext())
         case _ => fail("InstrumentedEnvelope is not mixed in")
       }
       env match {

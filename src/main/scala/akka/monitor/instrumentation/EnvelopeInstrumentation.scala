@@ -17,12 +17,12 @@
 package akka.monitor.instrumentation
 
 import org.aspectj.lang.annotation.{ DeclareMixin, Aspect }
-import kamon.util.RelativeNanoTimestamp
 
-case class EnvelopeContext(nanoTime: RelativeNanoTimestamp)
+case class EnvelopeContext(nanoTime: Long)
 
 object EnvelopeContext {
-  val Empty = EnvelopeContext(RelativeNanoTimestamp.zero)
+  val Empty = EnvelopeContext(0L)
+  def apply(): EnvelopeContext = EnvelopeContext(System.nanoTime())
 }
 
 trait InstrumentedEnvelope extends Serializable {
