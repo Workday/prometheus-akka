@@ -13,9 +13,10 @@ Other Differences from Kamon-Akka:
 - we only support Scala 2.11 and Scala 2.12
 - we only build with Akka 2.4 but this jar works fine with Akka 2.5 too
 - we have added Actor Group support (similar support was recently added to kamon-akka) - see description in Metrics section
+- records time in seconds as opposed to nanoseconds (the data is still a double) - since 0.8.0
 
 ```sbt
-"com.workday" %% "prometheus-akka" % "0.7.0"
+"com.workday" %% "prometheus-akka" % "0.8.0"
 ```
 
 There is a sample project at https://github.com/pjfanning/prometheus-akka-sample
@@ -43,14 +44,14 @@ The metrics are configured using [application.conf](https://github.com/typesafeh
 #### Actor
 
 - One metric per actor instance
-- mailboxSize (current size), processingTime, timeInMailbox, message, errors
+- mailboxSize (current size), processingTime, timeInMailbox, message count, error count
 
 #### Actor Router
 
 - One metric per router instance, summed across all routee actors
-- routingTime, timeInMailbox, message, errors
+- routingTime, timeInMailbox, message count, error count
 
 #### Actor Group
 
 - Each actor group has its own include/exclude rules and you can define many groups with individual actors being allowed to be included in many groups - the metrics are summed across all actors in the group
-- actorCount (current active actors), mailboxSize (current size), processingTime, timeInMailbox, message, errors
+- actorCount (current active actors), mailboxSize (current size), processingTime, timeInMailbox, message count, error count
