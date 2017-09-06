@@ -21,6 +21,8 @@ Other Differences from Kamon-Akka:
 
 There is a sample project at https://github.com/pjfanning/prometheus-akka-sample
 
+[Release Notes](https://github.com/Workday/prometheus-akka/releases)
+
 ## Usage
 
 To enable monitoring, include the appropriate jar as a dependency and include the following Java runtime flag in your Java startup command (aspectjweaver is a transitive dependency of prometheus-akka):
