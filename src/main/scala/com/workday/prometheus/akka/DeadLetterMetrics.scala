@@ -14,29 +14,11 @@
  * and limitations under the License.
  * =========================================================================================
  */
-package com.workday.prometheus
+package com.workday.prometheus.akka
 
-import scala.annotation.tailrec
+import io.prometheus.client.Counter
 
-import io.prometheus.client.Collector
-
-package object akka {
-  def metricFriendlyName(actorPath: String) = {
-    Collector.sanitizeMetricName(trimLeadingSlashes(actorPath).toLowerCase.replace("/", "_"))
-  }
-
-  @tailrec
-  private def trimLeadingSlashes(s: String): String = {
-    if (s.startsWith("/")) trimLeadingSlashes(s.substring(1)) else s
-  }
-
-  type ForkJoinPoolLike = {
-    def getParallelism: Int
-    def getPoolSize: Int
-    def getActiveThreadCount: Int
-    def getRunningThreadCount: Int
-    def getQueuedSubmissionCount: Int
-    def getQueuedTaskCount: Long
-    def getStealCount: Long
-  }
+object DeadLetterMetrics {
+  val deadLetters = Counter.build().name("dead_letters_count").help("Dead Letters").labelNames("actorSystem").register()
+  val unhandledMessages = Counter.build().name("unhandled_messages_count").help("Unhandled Messages").labelNames("actorSystem").register()
 }

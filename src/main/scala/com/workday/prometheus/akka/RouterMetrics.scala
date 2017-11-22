@@ -28,7 +28,7 @@ object RouterMetrics {
 }
 
 class RouterMetrics(entity: Entity) {
-  val actorName = metricFriendlyActorName(entity.name)
+  val actorName = metricFriendlyName(entity.name)
   val routingTime = Gauge.build().name(s"akka_router_routing_time_$actorName").help("Akka Router routing time (Seconds)").register()
   val processingTime = Gauge.build().name(s"akka_router_processing_time_$actorName").help("Akka Router processing time (Seconds)").register()
   val timeInMailbox = Gauge.build().name(s"akka_router_time_in_mailbox_$actorName").help("Akka Router time in mailbox (Seconds)").register()
