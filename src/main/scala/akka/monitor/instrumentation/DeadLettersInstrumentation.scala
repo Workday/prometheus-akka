@@ -46,7 +46,7 @@ class DeadLettersInstrumentation {
   def eventStreamCreation(eventStream: HasSystem, system: ActorSystem, debug: Boolean): Unit = {}
 
   @After("eventStreamCreation(eventStream, system, debug)")
-  def aroundEventStreamCreation(eventStream: HasSystem, system:ActorSystem, debug: Boolean): Unit = {
+  def aroundEventStreamCreation(eventStream: HasSystem, system: ActorSystem, debug: Boolean): Unit = {
     eventStream.setSystem(system)
   }
 
