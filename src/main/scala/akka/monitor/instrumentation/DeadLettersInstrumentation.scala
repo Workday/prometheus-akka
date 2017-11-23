@@ -3,7 +3,7 @@ package akka.monitor.instrumentation
 import akka.actor.{ActorSystem, DeadLetter, UnhandledMessage}
 import org.aspectj.lang.annotation.{After, Aspect, DeclareMixin, Pointcut}
 
-import com.workday.prometheus.akka.{DeadLetterMetrics, metricFriendlyName}
+import com.workday.prometheus.akka.{ActorSystemMetrics, metricFriendlyName}
 
 trait HasSystem {
   def system: ActorSystem
@@ -42,8 +42,8 @@ class DeadLettersInstrumentation {
   def afterStreamSubchannel(stream: HasSystem, event: AnyRef): Unit = trackEvent(stream, event)
 
   private def trackEvent(stream: HasSystem, event: AnyRef): Unit = event match {
-    case dl: DeadLetter => DeadLetterMetrics.deadLetters.labels(metricFriendlyName(stream.system.name)).inc()
-    case um: UnhandledMessage => DeadLetterMetrics.unhandledMessages.labels(stream.system.name).inc()
+    case dl: DeadLetter => ActorSystemMetrics.deadLetterCount.labels(metricFriendlyName(stream.system.name)).inc()
+    case um: UnhandledMessage => ActorSystemMetrics.unhandledMessageCount.labels(stream.system.name).inc()
     case _ => ()
   }
 

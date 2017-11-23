@@ -8,7 +8,7 @@
     <aspect name="akka.monitor.instrumentation.MetricsIntoRouterCellsMixin"/>
     <aspect name="akka.monitor.instrumentation.ActorCellInstrumentation"/>
     <aspect name="akka.monitor.instrumentation.RoutedActorCellInstrumentation"/>
-    
+    <aspect name="akka.monitor.instrumentation.DeadLettersInstrumentation"/>
     <!-- Dispatchers -->
     <aspect name="akka.monitor.instrumentation.DispatcherInstrumentation"/>
     <aspect name="akka.monitor.instrumentation.DispatcherMetricCollectionInfoIntoDispatcherMixin"/>
