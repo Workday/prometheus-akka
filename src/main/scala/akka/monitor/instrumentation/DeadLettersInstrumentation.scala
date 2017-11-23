@@ -1,9 +1,25 @@
+/*
+ * =========================================================================================
+ * Copyright © 2017 Workday, Inc.
+ * Copyright © 2013-2017 the kamon project <http://kamon.io/>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
+ * =========================================================================================
+ */
 package akka.monitor.instrumentation
 
 import akka.actor.{ActorSystem, DeadLetter, UnhandledMessage}
 import org.aspectj.lang.annotation.{After, Aspect, DeclareMixin, Pointcut}
 
-import com.workday.prometheus.akka.{ActorSystemMetrics, metricFriendlyName}
+import com.workday.prometheus.akka.{ActorSystemMetrics, MetricsConfig}
 
 trait HasSystem {
   def system: ActorSystem
@@ -34,17 +50,20 @@ class DeadLettersInstrumentation {
     eventStream.setSystem(system)
   }
 
-
   @Pointcut("execution(* akka.event.EventStream.publish(..)) && this(stream) && args(event)")
   def streamPublish(stream: HasSystem, event: AnyRef): Unit = {}
 
   @After("streamPublish(stream, event)")
   def afterStreamSubchannel(stream: HasSystem, event: AnyRef): Unit = trackEvent(stream, event)
 
-  private def trackEvent(stream: HasSystem, event: AnyRef): Unit = event match {
-    case dl: DeadLetter => ActorSystemMetrics.deadLetterCount.labels(metricFriendlyName(stream.system.name)).inc()
-    case um: UnhandledMessage => ActorSystemMetrics.unhandledMessageCount.labels(stream.system.name).inc()
-    case _ => ()
+  private def trackEvent(stream: HasSystem, event: AnyRef): Unit = {
+    if (MetricsConfig.matchEvents) {
+      event match {
+        case _: DeadLetter => ActorSystemMetrics.deadLetterCount.labels(stream.system.name).inc()
+        case _: UnhandledMessage => ActorSystemMetrics.unhandledMessageCount.labels(stream.system.name).inc()
+        case _ =>
+      }
+    }
   }
 
 }

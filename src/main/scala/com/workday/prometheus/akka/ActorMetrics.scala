@@ -28,7 +28,7 @@ object ActorMetrics {
 }
 
 class ActorMetrics(entity: Entity) {
-  val actorName = metricFriendlyName(entity.name)
+  val actorName = metricFriendlyActorName(entity.name)
   val mailboxSize = Gauge.build().name(s"akka_actor_mailbox_size_$actorName").help("Akka Actor mailbox size").register()
   val processingTime = Gauge.build().name(s"akka_actor_processing_time_$actorName").help("Akka Actor processing time (Seconds)").register()
   val timeInMailbox = Gauge.build().name(s"akka_actor_time_in_mailbox_$actorName").help("Akka Actor time in mailbox (Seconds)").register()

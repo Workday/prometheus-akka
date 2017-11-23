@@ -21,7 +21,7 @@ import scala.annotation.tailrec
 import io.prometheus.client.Collector
 
 package object akka {
-  def metricFriendlyName(actorPath: String) = {
+  def metricFriendlyActorName(actorPath: String) = {
     Collector.sanitizeMetricName(trimLeadingSlashes(actorPath).toLowerCase.replace("/", "_"))
   }
 

@@ -19,7 +19,11 @@ package com.workday.prometheus.akka
 import io.prometheus.client.{Counter, Gauge}
 
 object ActorSystemMetrics {
-  val actorCount = Gauge.build().name("actor_system_actor_count").help("Actor System Actor count").labelNames("actorSystem").register()
-  val deadLetterCount = Counter.build().name("actor_system_dead_letter_count").help("Actor System Dead Letter count").labelNames("actorSystem").register()
-  val unhandledMessageCount = Counter.build().name("actor_system_unhandled_message_count").help("Actor System Unhandled Message count").labelNames("actorSystem").register()
+  private[akka] val ActorCountMetricName = "akka_system_actor_count"
+  private[akka] val DeadLetterCountMetricName = "akka_system_dead_letter_count"
+  private[akka] val UnhandledMessageCountMetricName = "akka_system_unhandled_message_count"
+
+  val actorCount = Gauge.build().name(ActorCountMetricName).help("Actor System Actor count").labelNames("actorSystem").register()
+  val deadLetterCount = Counter.build().name(DeadLetterCountMetricName).help("Actor System Dead Letter count").labelNames("actorSystem").register()
+  val unhandledMessageCount = Counter.build().name(UnhandledMessageCountMetricName).help("Actor System Unhandled Message count").labelNames("actorSystem").register()
 }
