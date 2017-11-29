@@ -16,13 +16,13 @@
  */
 package akka.monitor.instrumentation
 
-import com.workday.prometheus.akka.{ ActorMetrics, MetricsConfig, RouterMetrics }
+import com.workday.prometheus.akka.MetricsConfig
 
-import akka.actor.{ ActorRef, ActorSystem, Cell }
-import akka.routing.{ NoRouter, RoutedActorRef }
+import akka.actor.{ActorRef, ActorSystem, Cell}
+import akka.routing.{NoRouter, RoutedActorRef}
 import kamon.metric.Entity
 
-case class CellInfo(entity: Entity, isRouter: Boolean, isRoutee: Boolean, isTracked: Boolean,
+case class CellInfo(entity: Entity, actorSystemName: String, isRouter: Boolean, isRoutee: Boolean, isTracked: Boolean,
     trackingGroups: List[String], actorCellCreation: Boolean)
 
 object CellInfo {
@@ -44,6 +44,6 @@ object CellInfo {
     val isTracked = !isRootSupervisor && MetricsConfig.shouldTrack(category, name)
     val trackingGroups = if(isRoutee && isRootSupervisor) List() else MetricsConfig.actorShouldBeTrackedUnderGroups(name)
 
-    CellInfo(entity, isRouter, isRoutee, isTracked, trackingGroups, actorCellCreation)
+    CellInfo(entity, system.name, isRouter, isRoutee, isTracked, trackingGroups, actorCellCreation)
   }
 }

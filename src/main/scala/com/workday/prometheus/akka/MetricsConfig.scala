@@ -30,6 +30,8 @@ object MetricsConfig {
   private val defaultConfig = ConfigFactory.load(this.getClass.getClassLoader, ConfigParseOptions.defaults(), ConfigResolveOptions.defaults().setAllowUnresolved(true))
   private val metricFiltersConfig = defaultConfig.getConfig("prometheus.akka.metric.filters")
 
+  lazy val matchEvents: Boolean = defaultConfig.getBoolean("prometheus.akka.match.events")
+
   implicit class Syntax(val config: Config) extends AnyVal {
     def firstLevelKeys: Set[String] = {
       import scala.collection.JavaConverters._
