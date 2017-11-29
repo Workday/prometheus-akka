@@ -16,7 +16,7 @@ Other Differences from Kamon-Akka:
 - records time in seconds as opposed to nanoseconds (the data is still a double) - since 0.8.0
 
 ```sbt
-"com.workday" %% "prometheus-akka" % "0.8.0"
+"com.workday" %% "prometheus-akka" % "0.8.2"
 ```
 
 There is a sample project at https://github.com/pjfanning/prometheus-akka-sample
@@ -42,6 +42,13 @@ The metrics are configured using [application.conf](https://github.com/typesafeh
 - differs a little between ForkJoin dispatchers and ThreadPool dispatchers
 - ForkJoin: parallelism, activeThreadCount, runningThreadCount, queuedSubmissionCount, queuedTaskCountGauge stealCount
 - ThreadPool: activeThreadCount, corePoolSize, currentPoolSize, largestPoolSize, maxPoolSize, completedTaskCount, totalTaskCount
+
+#### Actor System
+
+- Only added in v0.8.2
+- Actor Count
+- Unhandled Message Count
+- Dead Letter Count
 
 #### Actor
 
