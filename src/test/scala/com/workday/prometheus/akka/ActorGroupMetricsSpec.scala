@@ -64,7 +64,7 @@ class ActorGroupMetricsSpec extends TestKitBaseSpec("ActorGroupMetricsSpec") wit
 
       val map2 = findGroupRecorder("tracked")
       map2.getOrElse(ActorCountMetricName, -1.0) shouldEqual 2.0
-      map2.getOrElse(MessageCountMetricName, -1.0) shouldEqual 3.0
+      map2.getOrElse(MessageCountMetricName, -1.0) should (be >= 3.0)
     }
 
     "respect the configured include and exclude filters for routee actors" in {
