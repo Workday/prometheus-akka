@@ -2,9 +2,9 @@ organization := "com.workday"
 
 name := "prometheus-akka"
 
-scalaVersion := "2.11.11"
+scalaVersion := "2.11.12"
 
-crossScalaVersions := Seq("2.11.11", "2.12.2")
+crossScalaVersions := Seq("2.11.12", "2.12.4")
 
 def sysPropOrDefault(propName: String, default: String): String = Option(System.getProperty(propName)) match {
   case Some(propVal) if !propVal.trim.isEmpty => propVal.trim
@@ -13,7 +13,7 @@ def sysPropOrDefault(propName: String, default: String): String = Option(System.
 
 val akkaVersion = sysPropOrDefault("akka.version", "2.4.20")
 val aspectjweaverVersion = "1.8.10"
-val prometheusVersion = "0.0.26"
+val prometheusVersion = "0.1.0"
 
 checksums in update := Nil
 

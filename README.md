@@ -11,12 +11,12 @@ The use of the [Kamon-Prometheus](https://github.com/MonsantoCo/kamon-prometheus
 Other Differences from Kamon-Akka:
 - we do not support Kamon TraceContexts, as we currently have no use case for them
 - we only support Scala 2.11 and Scala 2.12
-- we only build with Akka 2.4 but this jar works fine with Akka 2.5 too
+- we only build with Akka 2.4 but we test the build with Akka 2.5 too
 - we have added Actor Group support (similar support was recently added to kamon-akka) - see description in Metrics section
 - records time in seconds as opposed to nanoseconds (the data is still a double) - since 0.8.0
 
 ```sbt
-"com.workday" %% "prometheus-akka" % "0.8.0"
+"com.workday" %% "prometheus-akka" % "0.8.2"
 ```
 
 There is a sample project at https://github.com/pjfanning/prometheus-akka-sample
@@ -42,6 +42,13 @@ The metrics are configured using [application.conf](https://github.com/typesafeh
 - differs a little between ForkJoin dispatchers and ThreadPool dispatchers
 - ForkJoin: parallelism, activeThreadCount, runningThreadCount, queuedSubmissionCount, queuedTaskCountGauge stealCount
 - ThreadPool: activeThreadCount, corePoolSize, currentPoolSize, largestPoolSize, maxPoolSize, completedTaskCount, totalTaskCount
+
+#### Actor System
+
+- Only added in v0.8.2
+- Actor Count
+- Unhandled Message Count
+- Dead Letter Count
 
 #### Actor
 

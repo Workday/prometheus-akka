@@ -19,7 +19,7 @@ package akka.monitor.instrumentation
 import org.aspectj.lang.ProceedingJoinPoint
 import org.slf4j.LoggerFactory
 
-import com.workday.prometheus.akka.{ActorGroupMetrics, ActorMetrics, RouterMetrics}
+import com.workday.prometheus.akka.{ActorGroupMetrics, ActorMetrics, ActorSystemMetrics, RouterMetrics}
 
 import akka.actor.{ActorRef, ActorSystem, Cell}
 import akka.monitor.instrumentation.ActorMonitors.{TrackedActor, TrackedRoutee}
@@ -51,7 +51,7 @@ object ActorMonitor {
   def createRegularActorMonitor(cellInfo: CellInfo): ActorMonitor = {
     if (cellInfo.isTracked || cellInfo.trackingGroups.length > 0) {
       val actorMetrics = if (cellInfo.isTracked) Some(ActorMetrics.metricsFor(cellInfo.entity)) else None
-      new TrackedActor(cellInfo.entity, actorMetrics, cellInfo.trackingGroups, cellInfo.actorCellCreation)
+      new TrackedActor(cellInfo.entity, cellInfo.actorSystemName, actorMetrics, cellInfo.trackingGroups, cellInfo.actorCellCreation)
     } else {
       ActorMonitors.ContextPropagationOnly
     }
@@ -59,7 +59,7 @@ object ActorMonitor {
 
   def createRouteeMonitor(cellInfo: CellInfo): ActorMonitor = {
     def routerMetrics = RouterMetrics.metricsFor(cellInfo.entity)
-    new TrackedRoutee(cellInfo.entity, routerMetrics, cellInfo.trackingGroups, cellInfo.actorCellCreation)
+    new TrackedRoutee(cellInfo.entity, cellInfo.actorSystemName, routerMetrics, cellInfo.trackingGroups, cellInfo.actorCellCreation)
   }
 }
 
@@ -78,9 +78,9 @@ object ActorMonitors {
     def cleanup(): Unit = {}
   }
 
-  class TrackedActor(val entity: Entity, actorMetrics: Option[ActorMetrics],
+  class TrackedActor(val entity: Entity, actorSystemName: String, actorMetrics: Option[ActorMetrics],
       trackingGroups: List[String], actorCellCreation: Boolean)
-      extends GroupMetricsTrackingActor(entity, trackingGroups, actorCellCreation) {
+      extends GroupMetricsTrackingActor(entity, actorSystemName, trackingGroups, actorCellCreation) {
 
     if (logger.isDebugEnabled()) {
       logger.debug(s"tracking ${entity.name} actor: ${actorMetrics.isDefined} actor-group: ${trackingGroups}")
@@ -126,9 +126,9 @@ object ActorMonitors {
     }
   }
 
-  class TrackedRoutee(val entity: Entity, routerMetrics: RouterMetrics,
+  class TrackedRoutee(val entity: Entity, actorSystemName: String, routerMetrics: RouterMetrics,
       trackingGroups: List[String], actorCellCreation: Boolean)
-      extends GroupMetricsTrackingActor(entity, trackingGroups, actorCellCreation) {
+      extends GroupMetricsTrackingActor(entity, actorSystemName, trackingGroups, actorCellCreation) {
 
     if (logger.isDebugEnabled()) {
       logger.debug(s"tracking ${entity.name} router: true actor-group: ${trackingGroups}")
@@ -163,9 +163,10 @@ object ActorMonitors {
     }
   }
 
-  abstract class GroupMetricsTrackingActor(entity: Entity,
+  abstract class GroupMetricsTrackingActor(entity: Entity, actorSystemName: String,
       trackingGroups: List[String], actorCellCreation: Boolean) extends ActorMonitor {
     if (actorCellCreation) {
+      ActorSystemMetrics.actorCount.labels(actorSystemName).inc()
       trackingGroups.foreach { group =>
         ActorGroupMetrics.actorCount.labels(group).inc()
       }
@@ -194,6 +195,7 @@ object ActorMonitors {
 
     def cleanup(): Unit = {
       if (actorCellCreation) {
+        ActorSystemMetrics.actorCount.labels(actorSystemName).dec()
         trackingGroups.foreach { group =>
           ActorGroupMetrics.actorCount.labels(group).dec()
         }
