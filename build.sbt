@@ -29,14 +29,14 @@ libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.1",
   "org.aspectj" % "aspectjweaver" % aspectjweaverVersion,
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
-  "org.scalatest" %% "scalatest" % "3.0.3" % "test",
+  "org.scalatest" %% "scalatest" % "3.0.4" % "test",
   "ch.qos.logback" % "logback-classic" % "1.2.3" % "test"
 )
 
 enablePlugins(JavaAgent)
 javaAgents += "org.aspectj" % "aspectjweaver" % aspectjweaverVersion % "test"
 
-testOptions in Test += Tests.Argument("-oD")
+testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
 
 parallelExecution in Test := false
 logBuffered := false
