@@ -16,7 +16,7 @@ Other Differences from Kamon-Akka:
 - records time in seconds as opposed to nanoseconds (the data is still a double) - since 0.8.0
 
 ```sbt
-"com.workday" %% "prometheus-akka" % "0.8.2"
+"com.workday" %% "prometheus-akka" % "0.8.3"
 ```
 
 There is a sample project at https://github.com/pjfanning/prometheus-akka-sample
@@ -27,7 +27,7 @@ There is a sample project at https://github.com/pjfanning/prometheus-akka-sample
 
 To enable monitoring, include the appropriate jar as a dependency and include the following Java runtime flag in your Java startup command (aspectjweaver is a transitive dependency of prometheus-akka):
 
--javaagent:/path/to/aspectjweaver-1.8.10.jar
+-javaagent:/path/to/aspectjweaver-1.8.13.jar
 
 If you don't have a Prometheus Metrics endpoint already, you can use the [Prometheus MetricsServlet](https://github.com/prometheus/client_java/blob/master/simpleclient_servlet/src/main/java/io/prometheus/client/exporter/MetricsServlet.java). If you don't want to use a servlet, you can work directly with the [Prometheus TextFormat](https://github.com/prometheus/client_java/blob/master/simpleclient_common/src/main/java/io/prometheus/client/exporter/common/TextFormat.java) class.
 
