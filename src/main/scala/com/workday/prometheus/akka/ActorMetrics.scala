@@ -19,7 +19,6 @@ package com.workday.prometheus.akka
 import scala.collection.JavaConverters._
 
 import io.prometheus.client._
-import kamon.metric.Entity
 
 object ActorMetrics {
   private val map = new java.util.concurrent.ConcurrentHashMap[Entity, ActorMetrics]().asScala

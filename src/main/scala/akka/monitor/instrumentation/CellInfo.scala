@@ -16,11 +16,10 @@
  */
 package akka.monitor.instrumentation
 
-import com.workday.prometheus.akka.MetricsConfig
+import com.workday.prometheus.akka.{Entity, MetricsConfig}
 
 import akka.actor.{ActorRef, ActorSystem, Cell}
 import akka.routing.{NoRouter, RoutedActorRef}
-import kamon.metric.Entity
 
 case class CellInfo(entity: Entity, actorSystemName: String, isRouter: Boolean, isRoutee: Boolean, isTracked: Boolean,
     trackingGroups: List[String], actorCellCreation: Boolean)

@@ -19,12 +19,11 @@ package akka.monitor.instrumentation
 import org.aspectj.lang.ProceedingJoinPoint
 import org.slf4j.LoggerFactory
 
-import com.workday.prometheus.akka.{ActorGroupMetrics, ActorMetrics, ActorSystemMetrics, RouterMetrics}
+import com.workday.prometheus.akka._
 
 import akka.actor.{ActorRef, ActorSystem, Cell}
 import akka.monitor.instrumentation.ActorMonitors.{TrackedActor, TrackedRoutee}
 import io.prometheus.client.Collector
-import kamon.metric.Entity
 
 trait ActorMonitor {
   def captureEnvelopeContext(): EnvelopeContext
