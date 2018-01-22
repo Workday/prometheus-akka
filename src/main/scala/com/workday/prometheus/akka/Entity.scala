@@ -16,22 +16,4 @@
  */
 package com.workday.prometheus.akka
 
-import org.slf4j.LoggerFactory
-
-case class Entity(name: String, category: String, tags: Map[String, String]) {
-  if(name == null) Entity.log.warn("Entity with name=null created (category: {}), your monitoring will not work as expected!", category)
-}
-
-object Entity {
-
-  private lazy val log = LoggerFactory.getLogger(classOf[Entity])
-
-  def apply(name: String, category: String): Entity =
-    apply(name, category, Map.empty)
-
-  def create(name: String, category: String): Entity =
-    apply(name, category, Map.empty)
-
-  def create(name: String, category: String, tags: Map[String, String]): Entity =
-    new Entity(name, category, tags)
-}
+case class Entity(name: String, category: String)
