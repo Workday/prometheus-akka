@@ -16,10 +16,8 @@
  */
 package com.workday.prometheus.akka
 
-import com.typesafe.config.{ Config, ConfigFactory, ConfigParseOptions, ConfigResolveOptions }
-
-import kamon.metric.EntityFilter
-import kamon.util.{ GlobPathFilter, RegexPathFilter }
+import com.typesafe.config.{Config, ConfigFactory, ConfigParseOptions, ConfigResolveOptions}
+import com.workday.prometheus.akka.impl.{EntityFilter, GlobPathFilter, RegexPathFilter}
 
 object MetricsConfig {
   val Dispatcher = "akka-dispatcher"

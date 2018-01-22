@@ -20,7 +20,6 @@ import akka.actor._
 import akka.monitor.instrumentation.CellInfo
 import akka.routing._
 import akka.testkit.TestProbe
-import kamon.metric.Entity
 
 class RouterMetricsSpec extends TestKitBaseSpec("RouterMetricsSpec") {
 

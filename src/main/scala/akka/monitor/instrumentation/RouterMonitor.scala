@@ -18,10 +18,9 @@ package akka.monitor.instrumentation
 
 import org.aspectj.lang.ProceedingJoinPoint
 
-import com.workday.prometheus.akka.RouterMetrics
+import com.workday.prometheus.akka.{Entity, RouterMetrics}
 
 import akka.actor.Cell
-import kamon.metric.Entity
 
 trait RouterMonitor {
   def processMessage(pjp: ProceedingJoinPoint): AnyRef

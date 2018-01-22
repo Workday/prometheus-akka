@@ -19,7 +19,6 @@ package com.workday.prometheus.akka
 import scala.collection.JavaConverters._
 
 import io.prometheus.client.{Counter, Gauge}
-import kamon.metric.Entity
 
 object RouterMetrics {
   private val map = new java.util.concurrent.ConcurrentHashMap[Entity, RouterMetrics]().asScala
