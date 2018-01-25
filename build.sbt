@@ -13,7 +13,7 @@ def sysPropOrDefault(propName: String, default: String): String = Option(System.
 
 val akkaVersion = sysPropOrDefault("akka.version", "2.4.20")
 val aspectjweaverVersion = "1.8.13"
-val prometheusVersion = "0.1.0"
+val prometheusVersion = "0.2.0"
 
 checksums in update := Nil
 
