@@ -1,6 +1,6 @@
 /*
  * =========================================================================================
- * Copyright © 2017 Workday, Inc.
+ * Copyright © 2017, 2018 Workday, Inc.
  * Copyright © 2013-2017 the kamon project <http://kamon.io/>
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
@@ -16,12 +16,12 @@
  */
 package com.workday.prometheus.akka
 
-import scala.collection.JavaConverters._
+import scala.collection.concurrent.TrieMap
 
 import io.prometheus.client._
 
 object ActorMetrics {
-  private val map = new java.util.concurrent.ConcurrentHashMap[Entity, ActorMetrics]().asScala
+  private val map = TrieMap[Entity, ActorMetrics]()
   def metricsFor(e: Entity) = map.getOrElseUpdate(e, new ActorMetrics(e))
   def hasMetricsFor(e: Entity) = map.contains(e)
 }
