@@ -17,8 +17,6 @@ val prometheusVersion = "0.2.0"
 
 checksums in update := Nil
 
-resolvers += Resolver.bintrayRepo("kamon-io", "releases")
-
 libraryDependencies ++= Seq(
   "org.slf4j" % "slf4j-api" % "1.7.25",
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
