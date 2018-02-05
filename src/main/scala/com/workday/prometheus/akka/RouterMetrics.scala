@@ -16,14 +16,27 @@
  */
 package com.workday.prometheus.akka
 
-import scala.collection.JavaConverters._
+import scala.collection.concurrent.TrieMap
+import scala.util.control.NonFatal
+
+import org.slf4j.LoggerFactory
 
 import io.prometheus.client.{Counter, Gauge}
 
 object RouterMetrics {
-  private val map = new java.util.concurrent.ConcurrentHashMap[Entity, RouterMetrics]().asScala
-  def metricsFor(e: Entity) = map.getOrElseUpdate(e, new RouterMetrics(e))
-  def hasMetricsFor(e: Entity) = map.contains(e)
+  private val logger = LoggerFactory.getLogger(RouterMetrics.getClass)
+  private val map = TrieMap[Entity, RouterMetrics]()
+  def metricsFor(e: Entity): Option[RouterMetrics] = {
+    try {
+      Some(map.getOrElseUpdate(e, new RouterMetrics(e)))
+    } catch {
+      case NonFatal(t) => {
+        logger.warn("Issue with getOrElseUpdate (failing over to simple get)", t)
+        map.get(e)
+      }
+    }
+  }
+  def hasMetricsFor(e: Entity): Boolean = map.contains(e)
 }
 
 class RouterMetrics(entity: Entity) {
