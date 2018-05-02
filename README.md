@@ -4,6 +4,8 @@
 
 # prometheus-akka
 
+This project is no longer under active maintenance. Development is now focused on [Micrometer-Akka](https://github.com/kontainers/micrometer-akka).
+
 This project is a fork of [Kamon-Akka](http://kamon.io/documentation/kamon-akka/0.6.6/overview/). The Kamon team have done a great job and if you are just experimenting with metrics collection, then their tools and documentation are a great starting point. 
 Our internal monitoring tools work better with [Prometheus Java Client](https://github.com/prometheus/client_java) based metrics than with [Kamon](http://kamon.io/documentation/get-started/) based metrics.
 The use of the Monsanto [Kamon-Prometheus](https://github.com/MonsantoCo/kamon-prometheus) bridge was not as smooth as we had hoped.
